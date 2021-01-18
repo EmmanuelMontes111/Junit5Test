@@ -1,12 +1,13 @@
-package Mockito;
+package mockito;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -24,6 +25,9 @@ class AddTest {
 
     @Mock
     private Print print;
+
+    @Captor
+    private ArgumentCaptor<Integer> captor;
 
     @BeforeEach
     public void setUp() {
@@ -137,13 +141,55 @@ class AddTest {
         //verify(validNumber, times(2)).check(4);
         verify(validNumber, never()).check(99);
         verify(validNumber, atLeast(1)).check(4);
-        verify(validNumber, atMost( 3)).check(4);
+        verify(validNumber, atMost(3)).check(4);
 
         verify(print).showMessage(9);
         verify(print, never()).showError();
     }
 
+    @Test
+    public void captorTest() {
+        //Given
+        given(validNumber.check(4)).willReturn(true);
+        given(validNumber.check(5)).willReturn(true);
 
+        //When
+        add.addPrint(4, 5);
+
+        //Then
+        verify(print).showMessage(captor.capture());
+        assertEquals(captor.getValue().intValue(), 9);
+    }
+
+
+    @Spy
+    List<String> spyList = new ArrayList<>();
+
+    @Mock
+    List<String> mockList = new ArrayList<>();
+
+    @Test
+    public void spyTest() {
+        spyList.add("1");
+        spyList.add("2");
+
+        verify(spyList).add("1");
+        verify(spyList).add("2");
+
+        assertEquals(2, spyList.size());
+    }
+
+    @Test
+    public void MockTest() {
+        mockList.add("1");
+        mockList.add("2");
+
+        verify(mockList).add("1");
+        verify(mockList).add("2");
+
+        given(mockList.size()).willReturn(2);
+        assertEquals(2, mockList.size());
+    }
 
 
 }

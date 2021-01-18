@@ -1,4 +1,4 @@
-package Junit5;
+package junit5;
 
 public class Calculator {
 

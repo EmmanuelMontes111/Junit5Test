@@ -1,4 +1,4 @@
-package Mockito;
+package mockito;
 
 public class ValidNumber {
 

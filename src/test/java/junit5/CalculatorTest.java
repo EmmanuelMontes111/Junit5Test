@@ -1,4 +1,4 @@
-package Junit5;
+package junit5;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
